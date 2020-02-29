@@ -2,15 +2,88 @@
 <html>                          
     <head>
 <title>Psychic Game</title>  
-<link href = "assets/css/style.css" rel = "stylesheet" type = "text/css">
+<!-- <link href = "assets/css/style.css" rel = "stylesheet" type = "text/css">
+<link href = "assets/javascript/game.js" rel = "script" type = "text/javascript"> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     </head>
     <body>
-<h1>The Psychic Game</h1>
-<h2> Guess what letter I'm thinking of!</h2>
-<h2>Wins: </h2>
-<h2>Losses: </h2>
-<h2>Guesses Left: </h2>
-<h2>Your guesses so far: </h2>
+    <h1>The Psychic Game</h1>
+    <h2> Guess what letter I'm thinking of!</h2>
 
-    </body>
+    <p id="wins"></p>
+    <p id="losses"></p>
+    <p id="guessesLeft"></p>
+    <p id="guessesSoFar"></p>
+
+    <script>
+    var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", 
+                        "J", "K", "L", "M", "N", "O", "P", "Q", "R", 
+                        "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+        var wins = 0;
+        var losses = 0;
+        var guessesLeft = 9;
+        var guesses = [];
+
+    function listStats (){
+        document.querySelector("#wins").innerHTML = "Wins: " + wins;
+        document.querySelector("#losses").innerHTML = "Losses: " + losses;
+        document.querySelector("#guessesLeft").innerHTML = ("Guesses Left: " + guessesLeft);
+        document.querySelector("#guessesSoFar").innerHTML = ("Guesses So Far: ");
+        for (var i = 0; i<guesses.length; i++){
+            document.querySelector("#guessesSoFar").innerHTML = guesses[i]; 
+        }
+    }
+
+    function updateStats (chosenLetter, userLetter){
+        if (chosenLetter != userLetter){
+            guessesLeft--;
+            if (guessesLeft == 0){
+                losses ++;
+                guessesLeft = 9;
+                guesses = [];
+                userLetter = chosenLetter;
+                break;
+            }
+            else{
+                guesses.push(userLetter);
+            }
+            
+        }
+        else {
+            wins++;
+            guesses = [];
+            break;
+        }
+    }
+
+    $(document).ready(function (){
+        listStats();
+        while (true ){
+            console.log("got to the first while");
+            var chosenLetter = letters[Math.floor(Math.random() * letters.length)];
+            var userLetter;
+            console.log("I chose a letter");
+            while(userLetter != chosenLetter){
+
+            document.onkeyup = function(e) {
+            userLetter = e.key.toUpperCase();
+            
+                updateStats(chosenLetter, userLetter);
+                listStats();
+            };
+        
+        }
+        
+    }
+
+
+
+    });
+
+
+    </script>
+
+</body>
 </html>
